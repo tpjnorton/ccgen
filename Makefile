@@ -1,9 +1,9 @@
 clean:
-	rm -f cgen *.c
+	rm -f ccgen *.c
 
 all:
-	g++ -O3 -Wall cgen.cpp -o cgen
+	g++ -O3 -Wall ccgen.cpp -o ccgen
 
 remake:
-	rm -f cgen *.c
-	g++ -O3 -Wall cgen.cpp -o cgen
+	rm -f ccgen *.c
+	g++ -O3 -Wall ccgen.cpp -o ccgen
