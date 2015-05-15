@@ -3,4 +3,7 @@
 #
 # Builds and runs default version of project
 make remake
-./build/ccgen
+IFILE="test.ccgen"
+OFILE="test.c"
+
+./build/ccgen $IFILE $OFILE

@@ -1,0 +1,10 @@
+using namespace std;
+const string if_default = "if(    )\n{\n    \n}";
+const string if_knr = "if(    ){\n    \n}";
+const string if_one_line = "if(    ) \n";
+const string else_if_default = "else if(    )\n{\n    \n}";
+const string else_if_knr = "else if(    ){\n    \n}";
+const string else_if_one_line = "else if(    ) \n";
+const string else_default = "else\n {\n}";
+const string else_knr = "else{\n   \n}";
+const string else_one_line = "else \n";    

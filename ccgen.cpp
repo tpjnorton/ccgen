@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include "stylegen.hpp"
 
-using namespace std;
+using namespace std;s
 
 void usage()
 {
@@ -10,13 +11,13 @@ void usage()
 	exit(1);
 }
 
-
 int main(int argc, char* argv[])
 {
-
-	if (argc == 1)
+	cout << "--------ccgen: A lightweight boilerplate C generator--------" << endl;
+	cout << "---------------------Version 0.0.1--------------------------" << endl;
+	if (argc < 3)
 	{
-		cout << "Error: No input Arguments Specified" << endl;
+		cout << "ERROR: No input Arguments Specified" << endl;
 		usage();
 	}
 	return 0;
