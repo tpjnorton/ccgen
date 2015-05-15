@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include "stylegen.hpp"
 
-using namespace std;s
+using namespace std;
 
 void usage()
 {
