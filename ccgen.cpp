@@ -245,7 +245,7 @@ bool parseTokens(readFile &file)
 int main(int argc, char* argv[])
 {
 	cout << "--------ccgen: A lightweight boilerplate C generator--------" << endl;
-	cout << "---------------------Version 0.0.1--------------------------" << endl;
+	cout << "---------------------Version 0.0.1.1------------------------" << endl;
 	if (argc < 3)
 	{
 		cout << "ERROR: No input Arguments Specified" << endl;
