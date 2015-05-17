@@ -5,23 +5,19 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "stylegen.hpp"
+#include "styletype.hpp"
+
+#define DEF 	0
+#define	KNR 	1
 
 using namespace std;
 
 class readFile
 {
 	public:
-		ifstream i;
-		vector<string> lineList;
-		vector<string> tokenList;
-		stringstream tokenbuf;
-		//stringstream linebuf;
-		string word,line;
+		readFile(char* s) : i((s)) { currentTokenPos = currentLinePos = 0;}
 
-		readFile(char* s) : i((s)) {}
-
-		void get_contents()
+		void getContents()
 		{
 			while (i.peek() != EOF)
 			{
@@ -36,8 +32,46 @@ class readFile
 			    	// cout << word << endl;
 				}
 			}
+			i.close();
 		}
 
+		string getNextToken()
+		{
+			string gettableWord;
+			gettableWord = tokenList[currentTokenPos];
+			currentTokenPos++;
+			return gettableWord;
+		}
+
+		string getNextLine()
+		{
+			string gettableLine;
+			gettableLine = lineList[currentLinePos];
+			currentLinePos++;
+			return gettableLine;
+		}
+
+		bool hasMoreTokens()
+		{
+			if (currentTokenPos < static_cast<int>(tokenList.size())) return true;
+			else return false;
+		}
+		
+		bool hasMoreLines()
+		{
+			if (currentLinePos <  static_cast<int>(lineList.size())) return true;
+			else return false;
+		}
+
+	private:
+		ifstream i;
+		vector<string> lineList;
+		vector<string> tokenList;
+		stringstream tokenbuf;
+		//stringstream linebuf;
+		string word,line;
+		int currentTokenPos;
+		int currentLinePos;
 };
 
 
@@ -49,8 +83,6 @@ void usage()
 
 int main(int argc, char* argv[])
 {
-	readFile file(argv[1]);
-	file.get_contents();
 	cout << "--------ccgen: A lightweight boilerplate C generator--------" << endl;
 	cout << "---------------------Version 0.0.1--------------------------" << endl;
 	if (argc < 3)
@@ -58,12 +90,12 @@ int main(int argc, char* argv[])
 		cout << "ERROR: No input Arguments Specified" << endl;
 		usage();
 	}
-	// unsigned i = 0;
-	// while (i<file.tokenList.size())
-	// {
-	// 	cout << file.tokenList[i] << endl;
-	// 	i++;
-	// }
+	readFile file(argv[1]);
+	file.getContents();
+	while (file.hasMoreTokens())
+	{
+		cout << file.getNextToken() << endl;
+	}
 
 	return 0;
 }
