@@ -28,6 +28,20 @@ char function1{
 
 }
 
+float function2{
+
+    if(    ){
+
+    }
+
+    if(    ){
+
+    }
+
+    if(    ) ;
+
+}
+
 int main(void){
     return 0;
 }

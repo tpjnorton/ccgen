@@ -284,7 +284,6 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 					understood = true;
 				}
 
-				understood = true;
 			}
 
 			else if (currToken == "INT")
@@ -305,7 +304,6 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 					understood = true;
 				}
 
-				understood = true;
 			}
 
 			else if (currToken == "CHAR")
@@ -326,7 +324,6 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 					understood = true;
 				}
 
-				understood = true;
 			}
 
 			else if (currToken == "FLOAT")
@@ -346,8 +343,6 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 					outputBuffer << begin_func_default;
 					understood = true;
 				}
-
-				understood = true;
 			}
 
 
@@ -368,8 +363,6 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 					outputBuffer << begin_func_default;
 					understood = true;
 				}
-
-				understood = true;
 			}
 			tabCount++;
 			numFunctions++;
@@ -393,7 +386,7 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 int main(int argc, char* argv[])
 {
 	cout << "--------ccgen: A lightweight boilerplate C generator--------" << endl;
-	cout << "---------------------Version 0.0.1.1------------------------" << endl;
+	cout << "---------------------Version 0.0.2--------------------------" << endl;
 
 	stringstream outputBuffer;
 	int tabCount = 0;
