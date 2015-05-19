@@ -14,7 +14,9 @@
 using namespace std;
 
 int codingStyle = 0;
-stringstream outputbuffer;
+bool mainDeclared = false;
+bool inFunction = false;
+int numFunctions = 0;
 
 class readFile
 {
@@ -71,13 +73,20 @@ class readFile
 		ifstream i;
 		vector<string> lineList;
 		vector<string> tokenList;
-		stringstream tokenbuf;
-		//stringstream linebuf;
 		string word,line;
 		int currentTokenPos;
 		int currentLinePos;
 };
 
+void addTabs(stringstream &outputBuffer, int tabCount)
+{
+	int i = 0;
+
+	for(i = 0; i<tabCount; i++)
+	{
+		outputBuffer << std_tab;
+	}
+}
 
 void usage()
 {
@@ -85,10 +94,10 @@ void usage()
 	exit(1);
 }
 
-bool parseTokens(readFile &file)
+bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 {
 	bool understood = false;
-	outputbuffer << def_include;
+	outputBuffer << def_include;
 	while (file.hasMoreTokens())
 	{
 		string currToken = file.getNextToken();
@@ -119,13 +128,21 @@ bool parseTokens(readFile &file)
 			{
 				if (codingStyle == KNR)
 				{
-					outputbuffer << if_knr;
+					addTabs(outputBuffer,tabCount);
+					outputBuffer << if_knr;
+					addTabs(outputBuffer,tabCount);
+					outputBuffer << end_if;
 					understood = true;
 				}
 
 				else if (codingStyle == DEF)
 				{
-					outputbuffer << if_default;
+					addTabs(outputBuffer,tabCount);
+					outputBuffer << if_default_part1;
+					addTabs(outputBuffer,tabCount);
+					outputBuffer << if_default_part2;
+					addTabs(outputBuffer,tabCount);
+					outputBuffer << end_if;		
 					understood = true;
 				}
 
@@ -134,7 +151,8 @@ bool parseTokens(readFile &file)
 
 			else if (currToken == "ONE")
 			{
-				outputbuffer << if_one_line;
+				addTabs(outputBuffer,tabCount);
+				outputBuffer << if_one_line;
 				understood = true;
 			}
 		}
@@ -147,22 +165,21 @@ bool parseTokens(readFile &file)
 			{
 				if (codingStyle == KNR)
 				{
-					outputbuffer << else_if_knr;
+					outputBuffer << else_if_knr;
 					understood = true;
 				}
 
 				else if (codingStyle == DEF)
 				{
-					outputbuffer << else_if_default;
+					outputBuffer << else_if_default;
 					understood = true;
 				}
 
-				understood = true;
 			}
 
 			else if (currToken == "ONE")
 			{
-				outputbuffer << else_if_one_line;
+				outputBuffer << else_if_one_line;
 				understood = true;
 			}
 		}
@@ -175,13 +192,13 @@ bool parseTokens(readFile &file)
 			{
 				if (codingStyle == KNR)
 				{
-					outputbuffer << else_knr;
+					outputBuffer << else_knr;
 					understood = true;
 				}
 
 				else if (codingStyle == DEF)
 				{
-					outputbuffer << else_default;
+					outputBuffer << else_default;
 					understood = true;
 				}
 
@@ -190,7 +207,7 @@ bool parseTokens(readFile &file)
 
 			else if (currToken == "ONE")
 			{
-				outputbuffer << else_one_line;
+				outputBuffer << else_one_line;
 				understood = true;
 			}
 		}
@@ -198,18 +215,19 @@ bool parseTokens(readFile &file)
 		else if (currToken == "MAIN")
 		{
 			currToken = file.getNextToken();
+			if (mainDeclared) return false;
 			
 			if (currToken == "ARG")
 			{
 				if (codingStyle == KNR)
 				{
-					outputbuffer << arg_main_knr;
+					outputBuffer << arg_main_knr;
 					understood = true;
 				}
 
 				else if (codingStyle == DEF)
 				{
-					outputbuffer << arg_main_default;
+					outputBuffer << arg_main_default;
 					understood = true;
 				}
 
@@ -220,13 +238,13 @@ bool parseTokens(readFile &file)
 			{
 				if (codingStyle == KNR)
 				{
-					outputbuffer << void_main_knr;
+					outputBuffer << void_main_knr;
 					understood = true;
 				}
 
 				else if (codingStyle == DEF)
 				{
-					outputbuffer << void_main_default;
+					outputBuffer << void_main_default;
 					understood = true;
 				}
 
@@ -234,40 +252,171 @@ bool parseTokens(readFile &file)
 			}
 		}
 
+		else if (currToken == "FUNC")
+		{
+			currToken = file.getNextToken();
+			if (inFunction) return false;
+			inFunction = true;
+			
+			if (currToken == "VOID")
+			{
+				outputBuffer << type_void;
+				outputBuffer << func_ident;
+				outputBuffer << numFunctions;
 
-		if (!understood) return false;
+				if (codingStyle == KNR)
+				{
+					outputBuffer << begin_func_knr;
+					understood = true;
+				}
+
+				else if (codingStyle == DEF)
+				{
+					outputBuffer << begin_func_default;
+					understood = true;
+				}
+
+				understood = true;
+			}
+
+			else if (currToken == "INT")
+			{
+				outputBuffer << type_int;
+				outputBuffer << func_ident;
+				outputBuffer << numFunctions;
+
+				if (codingStyle == KNR)
+				{
+					outputBuffer << begin_func_knr;
+					understood = true;
+				}
+
+				else if (codingStyle == DEF)
+				{
+					outputBuffer << begin_func_default;
+					understood = true;
+				}
+
+				understood = true;
+			}
+
+			else if (currToken == "CHAR")
+			{
+				outputBuffer << type_char;
+				outputBuffer << func_ident;
+				outputBuffer << numFunctions;
+
+				if (codingStyle == KNR)
+				{
+					outputBuffer << begin_func_knr;
+					understood = true;
+				}
+
+				else if (codingStyle == DEF)
+				{
+					outputBuffer << begin_func_default;
+					understood = true;
+				}
+
+				understood = true;
+			}
+
+			else if (currToken == "FLOAT")
+			{
+				outputBuffer << type_float;
+				outputBuffer << func_ident;
+				outputBuffer << numFunctions;
+
+				if (codingStyle == KNR)
+				{
+					outputBuffer << begin_func_knr;
+					understood = true;
+				}
+
+				else if (codingStyle == DEF)
+				{
+					outputBuffer << begin_func_default;
+					understood = true;
+				}
+
+				understood = true;
+			}
+
+
+			else if (currToken == "DOUBLE")
+			{
+				outputBuffer << type_double;
+				outputBuffer << func_ident;
+				outputBuffer << numFunctions;
+
+				if (codingStyle == KNR)
+				{
+					outputBuffer << begin_func_knr;
+					understood = true;
+				}
+
+				else if (codingStyle == DEF)
+				{
+					outputBuffer << begin_func_default;
+					understood = true;
+				}
+
+				understood = true;
+			}
+			tabCount++;
+			numFunctions++;
+		}
+
+		else if (currToken == "ENDFUNC")
+		{
+			if (!inFunction) return false;
+			inFunction = false;		
+			outputBuffer << end_func;
+			tabCount--;
+			// numFunctions--;
+		}
+
+		if (!understood && numFunctions < 0) return false;
 	}
 
-	if (understood) return true;
-	return false;
+	return understood;
 }
 
 int main(int argc, char* argv[])
 {
 	cout << "--------ccgen: A lightweight boilerplate C generator--------" << endl;
 	cout << "---------------------Version 0.0.1.1------------------------" << endl;
+
+	stringstream outputBuffer;
+	int tabCount = 0;
 	if (argc < 3)
 	{
 		cout << "ERROR: No input Arguments Specified" << endl;
 		usage();
 	}
+
 	readFile file(argv[1]);
 	cout << "Reading file..." << endl;
 	file.getContents();
-	usleep(500000);
+	usleep(300000);
 	cout << "File Read Succesful." << endl;
-	usleep(500000);
+	usleep(300000);
 	cout << "Parsing file..." << endl;
-	usleep(500000);
-	bool retval = parseTokens(file);
+	usleep(300000);
+	bool retval = parseTokens(file,outputBuffer,tabCount);
+	if (!retval)
+	{
+		cout << "Error" << endl;
+		return -1;
+	}
 	cout << "DONE" << endl;
-	cout << "parse = "<< boolalpha << retval << endl;
+	// cout << "parse = "<< boolalpha << retval << endl;
 	string currentStructure;
 	ofstream o(argv[2]);
 
 
 
-	currentStructure = outputbuffer.str();
+	currentStructure = outputBuffer.str();
 	o << currentStructure;
 
 
