@@ -165,14 +165,22 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 			{
 				if (codingStyle == KNR)
 				{
-					outputBuffer << else_if_knr;
-					understood = true;
+                    addTabs(outputBuffer,tabCount);
+                    outputBuffer << else_if_knr;
+                    addTabs(outputBuffer,tabCount);
+                    outputBuffer << end_if;
+                    understood = true;
 				}
 
 				else if (codingStyle == DEF)
 				{
-					outputBuffer << else_if_default;
-					understood = true;
+                    addTabs(outputBuffer,tabCount);
+                    outputBuffer << else_if_default_part1;
+                    addTabs(outputBuffer,tabCount);
+                    outputBuffer << else_if_default_part2;
+                    addTabs(outputBuffer,tabCount);
+                    outputBuffer << end_if;     
+                    understood = true;
 				}
 
 			}
