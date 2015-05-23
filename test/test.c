@@ -1,26 +1,15 @@
 #include <stdio.h>
 
-void function0{
+void function0()
+{
 
-    if(    ){
-
-    }
-
-    else if(    ){
+    if(    )
+    {
 
     }
 
-    if(    ) ;
-
-}
-
-char function1{
-
-    if(    ){
-
-    }
-
-    if(    ){
+    else if(    )
+    {
 
     }
 
@@ -28,13 +17,16 @@ char function1{
 
 }
 
-float function2{
+char function1()
+{
 
-    if(    ){
+    if(    )
+    {
 
     }
 
-    if(    ){
+    if(    )
+    {
 
     }
 
@@ -42,7 +34,25 @@ float function2{
 
 }
 
-int main(void){
+float function2()
+{
+
+    if(    )
+    {
+
+    }
+
+    if(    )
+    {
+
+    }
+
+    if(    ) ;
+
+}
+
+int main(void)
+{
     return 0;
 }
 

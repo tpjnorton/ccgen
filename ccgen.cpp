@@ -271,6 +271,7 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 				outputBuffer << type_void;
 				outputBuffer << func_ident;
 				outputBuffer << numFunctions;
+				outputBuffer << "()";
 
 				if (codingStyle == KNR)
 				{
@@ -291,6 +292,7 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 				outputBuffer << type_int;
 				outputBuffer << func_ident;
 				outputBuffer << numFunctions;
+				outputBuffer << "()";
 
 				if (codingStyle == KNR)
 				{
@@ -311,6 +313,7 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 				outputBuffer << type_char;
 				outputBuffer << func_ident;
 				outputBuffer << numFunctions;
+				outputBuffer << "()";
 
 				if (codingStyle == KNR)
 				{
@@ -331,6 +334,7 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 				outputBuffer << type_float;
 				outputBuffer << func_ident;
 				outputBuffer << numFunctions;
+				outputBuffer << "()";
 
 				if (codingStyle == KNR)
 				{
@@ -351,6 +355,7 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 				outputBuffer << type_double;
 				outputBuffer << func_ident;
 				outputBuffer << numFunctions;
+				outputBuffer << "()";
 
 				if (codingStyle == KNR)
 				{
