@@ -17,6 +17,13 @@ int codingStyle = 0;
 bool mainDeclared = false;
 bool inFunction = false;
 int numFunctions = 0;
+int currentLine = 0;
+
+struct stringMetadata
+{
+	string line;
+	int lineNo;
+};
 
 class readFile
 {
@@ -29,14 +36,27 @@ class readFile
 			{
 				getline(i,line);
 				stringstream linebuf(line);
-				lineList.push_back(line);
+				stringMetadata lineStruct;
+				lineStruct.line = line;
+				lineStruct.lineNo = currentLine;
+				lineList.push_back(lineStruct);
 
 				while (linebuf.good())
 				{
+					stringMetadata wordStruct;
 					getline(linebuf,word,' ');
-					tokenList.push_back(word);
+
+					if (word != "")
+					{			
+						wordStruct.line = word;
+						wordStruct.lineNo = currentLine;
+						// cout << currentLine << endl;
+						tokenList.push_back(wordStruct);
+					}
 			    	// cout << word << endl;
 				}
+				
+				currentLine++;
 			}
 			i.close();
 		}
@@ -44,7 +64,7 @@ class readFile
 		string getNextToken()
 		{
 			string gettableWord;
-			gettableWord = tokenList[currentTokenPos];
+			gettableWord = tokenList[currentTokenPos].line;
 			currentTokenPos++;
 			return gettableWord;
 		}
@@ -52,10 +72,48 @@ class readFile
 		string getNextLine()
 		{
 			string gettableLine;
-			gettableLine = lineList[currentLinePos];
+			gettableLine = lineList[currentLinePos].line;
 			currentLinePos++;
 			return gettableLine;
 		}
+
+		string getPrevLine()
+		{
+			currentLinePos--;
+			string gettableLine;
+			gettableLine = lineList[currentLinePos].line;
+			return gettableLine;
+		}
+
+		string getPrevToken()
+		{
+			currentTokenPos--;
+			string gettableWord;
+			gettableWord = tokenList[currentTokenPos].line;
+			return gettableWord;
+		}
+
+		string peekNextLine()
+		{
+			string gettableLine;
+			gettableLine = lineList[currentLinePos].line;
+			return gettableLine;
+		}
+
+		string peekNextToken()
+		{
+			string gettableWord;
+			gettableWord = tokenList[currentTokenPos].line;
+			return gettableWord;
+		}
+
+		int getLineNo()
+		{
+			int lineNo;
+			lineNo = tokenList[currentTokenPos].lineNo;
+			return lineNo;
+		}
+
 
 		bool hasMoreTokens()
 		{
@@ -71,8 +129,8 @@ class readFile
 
 	private:
 		ifstream i;
-		vector<string> lineList;
-		vector<string> tokenList;
+		vector<stringMetadata> lineList;
+		vector<stringMetadata> tokenList;
 		string word,line;
 		int currentTokenPos;
 		int currentLinePos;
@@ -379,13 +437,28 @@ bool parseTokens(readFile &file, stringstream &outputBuffer, int &tabCount)
 			inFunction = false;		
 			outputBuffer << end_func;
 			tabCount--;
+			understood = true;
 			// numFunctions--;
 		}
 
-		if (!understood && numFunctions < 0) return false;
+		if (!understood) return false;
 	}
 
 	return understood;
+}
+
+void error(bool retval, readFile &file)
+{
+	if(!retval)
+	{
+		string errToken = file.getPrevToken();
+		int currLine 	= file.getLineNo();
+
+		cout << "ERROR @ line " << currLine << endl;
+		cout << "Token: " 	    << errToken << endl;
+
+		exit(1);
+	}
 }
 
 int main(int argc, char* argv[])
@@ -410,11 +483,7 @@ int main(int argc, char* argv[])
 	cout << "Parsing file..." << endl;
 	usleep(300000);
 	bool retval = parseTokens(file,outputBuffer,tabCount);
-	if (!retval)
-	{
-		cout << "Error" << endl;
-		return -1;
-	}
+	error(retval,file);
 	cout << "DONE" << endl;
 	// cout << "parse = "<< boolalpha << retval << endl;
 	string currentStructure;
