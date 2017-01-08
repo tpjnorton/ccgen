@@ -1,12 +1,10 @@
+// #include "ccgen.hpp"
+#include <unistd.h>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
 #include "styletype.hpp"
-#include <unistd.h>
+#include "readFile.hpp"
 
 #define DEF   0
 #define KNR   1
@@ -17,124 +15,6 @@ int codingStyle = 0;
 bool mainDeclared = false;
 bool inFunction = false;
 int numFunctions = 0;
-int currentLine = 0;
-
-struct stringMetadata
-{
-  string line;
-  int lineNo;
-};
-
-class readFile
-{
-  public:
-    readFile(char* s) : i((s)) { currentTokenPos = currentLinePos = 0;}
-
-    void getContents()
-    {
-      while (i.peek() != EOF)
-      {
-        getline(i,line);
-        stringstream linebuf(line);
-        stringMetadata lineStruct;
-        lineStruct.line = line;
-        lineStruct.lineNo = currentLine;
-        lineList.push_back(lineStruct);
-
-        while (linebuf.good())
-        {
-          stringMetadata wordStruct;
-          getline(linebuf,word,' ');
-
-          if (word != "")
-          {     
-            wordStruct.line = word;
-            wordStruct.lineNo = currentLine;
-            // cout << currentLine << endl;
-            tokenList.push_back(wordStruct);
-          }
-            // cout << word << endl;
-        }
-        
-        currentLine++;
-      }
-      i.close();
-    }
-
-    string getNextToken()
-    {
-      string gettableWord;
-      gettableWord = tokenList[currentTokenPos].line;
-      currentTokenPos++;
-      return gettableWord;
-    }
-
-    string getNextLine()
-    {
-      string gettableLine;
-      gettableLine = lineList[currentLinePos].line;
-      currentLinePos++;
-      return gettableLine;
-    }
-
-    string getPrevLine()
-    {
-      currentLinePos--;
-      string gettableLine;
-      gettableLine = lineList[currentLinePos].line;
-      return gettableLine;
-    }
-
-    string getPrevToken()
-    {
-      currentTokenPos--;
-      string gettableWord;
-      gettableWord = tokenList[currentTokenPos].line;
-      return gettableWord;
-    }
-
-    string peekNextLine()
-    {
-      string gettableLine;
-      gettableLine = lineList[currentLinePos].line;
-      return gettableLine;
-    }
-
-    string peekNextToken()
-    {
-      string gettableWord;
-      gettableWord = tokenList[currentTokenPos].line;
-      return gettableWord;
-    }
-
-    int getLineNo()
-    {
-      int lineNo;
-      lineNo = tokenList[currentTokenPos].lineNo;
-      return lineNo;
-    }
-
-
-    bool hasMoreTokens()
-    {
-      if (currentTokenPos < static_cast<int>(tokenList.size())) return true;
-      else return false;
-    }
-    
-    bool hasMoreLines()
-    {
-      if (currentLinePos <  static_cast<int>(lineList.size())) return true;
-      else return false;
-    }
-
-  private:
-    ifstream i;
-    vector<stringMetadata> lineList;
-    vector<stringMetadata> tokenList;
-    string word,line;
-    int currentTokenPos;
-    int currentLinePos;
-};
 
 void addTabs(stringstream &outputBuffer, int tabCount)
 {
