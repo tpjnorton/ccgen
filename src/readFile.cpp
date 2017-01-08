@@ -2,7 +2,7 @@
 #include "readFile.hpp"
 
 readFile::readFile(char *s) : i((s)) {
-  currentTokenPos = currentLinePos = 0;
+  currentTokenPos = currentLinePos = currentLine = 0;
 }
 
 void readFile::getContents() {

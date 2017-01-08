@@ -34,9 +34,9 @@ class readFile {
     vector<stringMetadata> lineList;
     vector<stringMetadata> tokenList;
     string word, line;
-    int currentTokenPos = 0;
-    int currentLinePos = 0;
-    int currentLine = 0;
+    int currentTokenPos;
+    int currentLinePos;
+    int currentLine;
 };
 
 #endif  // SRC_READFILE_HPP_
